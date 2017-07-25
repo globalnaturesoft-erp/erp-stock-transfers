@@ -44,6 +44,7 @@ vi:
             approver: "Người duyệt"
             created_at: "Ngày tạo"
             actions: "Tùy chọn"
+            no_matching_records_found: "Danh sách hiện không có kết quả nào được tìm thấy"
           new:
             transfers: "Chuyển kho"
             create: "Tạo phiếu chuyển kho"
