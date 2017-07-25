@@ -1,0 +1,29 @@
+<% content_for :title do %>
+    <%= t('.edit') %>
+<% end %>
+
+<% content_for :page_title do %>    
+    <a href="<%= erp_stock_transfers.backend_transfers_path %>">
+    <i class="glyphicon glyphicon-transfer"></i> <%= t('.transfers') %>
+    </a> / <%= @transfer.code %> / <%= t('.edit') %>
+<% end %>
+
+<% content_for :page_toolbar do %>
+    <%= erp_component('button/create', {
+        text: t('.create'),
+        href: erp_stock_transfers.new_backend_transfer_path,
+        class: 'btn-noborder'
+    }) %>
+<% end %>
+
+<div class="row">
+    <div class="col-md-12">
+        <% if @transfer.errors.any? %>
+            <%= erp_form_control("form_error_message") %>
+        <% end %>
+        
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+        <%= render 'form', transfer: @transfer %>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+</div>

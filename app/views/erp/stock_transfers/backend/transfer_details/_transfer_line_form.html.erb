@@ -1,0 +1,30 @@
+<input type="hidden" name="transfer[transfer_details_attributes][<%= uid %>][id]" value="<%= transfer_detail.id %>">
+<input type="hidden" name="transfer[transfer_details_attributes][<%= uid %>][product_id]" value="<%= transfer_detail.product_id %>" class="product-id">
+<input type="hidden" name="transfer[transfer_details_attributes][<%= uid %>][_destroy]" value="">
+<td><%= transfer_detail.product_code %></td>
+<td><%= transfer_detail.product_name %></td>
+<td width='10%'>
+    <%= erp_form_control("number", {
+        name: 'transfer[transfer_details_attributes][' + uid + '][quantity]',
+        value: transfer_detail.quantity,
+        text: transfer_detail.quantity,
+        class: "line_quantity inline"
+    }) %>
+</td>
+<td class="text-right">
+    <%= transfer_detail.stock_source %>
+</td>
+<td class="text-right">
+    2
+</td class="text-right">
+<td class="text-right">
+    <%= transfer_detail.stock_destination %>
+</td>
+<td class="text-right">
+    57
+</td>
+<td class="text-right">
+    <%= erp_form_control("addableform_remove_button", {
+        is_nested_form: true
+    }) %>
+</td>

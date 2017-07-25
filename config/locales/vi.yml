@@ -1,0 +1,92 @@
+vi:
+  layouts:
+    erp:
+      backend:
+        sidebar:
+          stock_transfer: "Chuyển kho"
+          transfers: "Phiếu chuyển kho"
+  erp:
+    stock_transfers: 
+      backend:
+        transfers:
+          create:
+            success: "Phiếu chuyển kho đã được tạo thành công"
+          update:
+            success: "Phiếu chuyển kho đã được cập nhật thành công"
+          destroy:
+            success: "Phiếu chuyển kho đã được xóa thành công"
+          index:
+            transfers: "Chuyển kho"
+            create: "Tạo phiếu chuyển kho"
+            transfer_code: "Mã phiếu"
+            code: "Mã phiếu"
+            received_at: "Ngày chuyển"
+            source_warehouse: "Kho nguồn"
+            destination_warehouse: "Kho đích"
+            quantity: "Số lượng"
+            note: "Ghi chú"
+            status: "Trạng thái"
+            creator: "Người tạo"
+            approver: "Người duyệt"
+            created_at: "Ngày tạo"
+          list:
+            edit: "Chỉnh sửa"
+            delete: "Xóa phiếu"
+            delete_confirm: "Nội dung này sẽ bị xóa vĩnh viễn! Bạn có thực sự muốn xóa?"
+            code: "Mã phiếu"
+            received_at: "Ngày chuyển"
+            source_warehouse: "Kho nguồn"
+            destination_warehouse: "Kho đích"
+            quantity: "Số lượng"
+            note: "Ghi chú"
+            status: "Trạng thái"
+            creator: "Người tạo"
+            approver: "Người duyệt"
+            created_at: "Ngày tạo"
+            actions: "Tùy chọn"
+          new:
+            transfers: "Chuyển kho"
+            create: "Tạo phiếu chuyển kho"
+          edit:
+            transfers: "Chuyển kho"
+            create: "Tạo phiếu chuyển kho"
+            edit: "Chỉnh sửa"
+          form:
+            code: "Mã phiếu"
+            received_at: "Ngày chuyển"
+            source_warehouse: "Kho nguồn"
+            destination_warehouse: "Kho đích"
+            note: "Mô tả / Ghi chú"
+            help_transfer_code: "Mã sẽ tạo tự động nếu bạn không nhập"
+            placeholder_transfer_code: "Mã phiếu chuyển kho"
+            choose_source_warehouse: "Chọn kho nguồn"
+            choose_destination_warehouse: "Chọn kho đích"
+            choose_received_at: "Chọn ngày chuyển kho"
+            enter_note: "Nhập nội dung ghi chú"
+            product: "Sản phẩm"
+            help_product: "Các sản phẩm được phép chuyển kho"
+            choose_product: "Tìm/chọn sản phẩm chuyển kho"
+            add: "Thêm vào danh sách chuyển kho"
+            create_product: "Thêm sản phẩm"
+            edit_product: "Chỉnh sửa sản phẩm"
+            product_code: "Mã sản phẩm"
+            product_name: "Tên sản phẩm"
+            quantity: "Số lượng"
+            current_stock_source: "Tồn kho nguồn"
+            after_stock_source: "Kho nguồn (sau)"
+            available_stock_at_source_after_transfer: "Số lượng tồn kho của kho nguồn sau khi chuyển"
+            current_stock_destination: "Tồn kho đích"
+            after_stock_destination: "Kho đích (sau)"
+            available_stock_at_destination_after_transfer: "Số lượng tồn kho của kho đích sau khi chuyển"
+            quantity_total: "Tổng sản phẩm"
+            action: "Hành động"
+            submit: "Lưu"
+            cancel: "Hủy"
+          transfer_details:
+            transfer_details: "Chi tiết chuyển kho"
+            from: "Từ"
+            to: "sang"
+            product_code: "Mã sản phẩm"
+            product_name: "Tên sản phẩm"
+            quantity: "Số lượng chuyển"
+            stock: "Tồn kho"

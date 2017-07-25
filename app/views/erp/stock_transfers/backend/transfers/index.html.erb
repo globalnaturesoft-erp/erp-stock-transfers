@@ -1,0 +1,70 @@
+<% content_for :title do %>
+    <%= t('.transfers') %>
+<% end %>
+
+<% content_for :page_title do %>
+    <i class="glyphicon glyphicon-transfer"></i> <%= t('.transfers') %>
+<% end %>
+
+<% content_for :page_toolbar do %>
+    <%= erp_component('button/create', {
+        text: t('.create'),
+        href: erp_stock_transfers.new_backend_transfer_path,
+        class: 'btn-noborder'
+    }) %>
+<% end %>
+
+<%= erp_datalist(
+    url: erp_stock_transfers.list_backend_transfers_path,
+    keywords: [
+        {
+            text: t('.transfer_code'), name: 'erp_orders_orders.code'
+        },
+        {
+            text: t('creator'),
+            name: 'erp_users.name',
+            select: {
+                name: 'erp_users.id',
+                data_url: erp.dataselect_backend_users_path
+            }
+        }
+    ],
+    actions: [
+        
+    ],
+    filters: [
+        
+    ],
+    columns: [
+        {
+            text: t('.code'), name: 'code', value: true, checked: true
+        },
+        {
+            text: t('.received_at'), name: 'received_at', value: true, checked: true
+        },
+        {
+            text: t('.source_warehouse'), name: 'source_warehouse', value: true, checked: true
+        },
+        {
+            text: t('.destination_warehouse'), name: 'destination_warehouse', value: true, checked: true
+        },
+        {
+            text: t('.quantity'), name: 'quantity', value: true, checked: true
+        },
+        {
+            text: t('.note'), name: 'note', value: true, checked: false
+        },
+        {
+            text: t('.status'), name: 'status', value: true, checked: true
+        },
+        {
+            text: t('.creator'), name: 'creator', value: true, checked: true
+        },
+        {
+            text: t('.approver'), name: 'approver', value: true, checked: true
+        },
+        {
+            text: t('.created_at'), name: 'created_at', value: true, checked: false
+        }
+    ]
+) %>

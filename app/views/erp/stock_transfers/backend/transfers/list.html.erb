@@ -1,0 +1,137 @@
+<table class="table table-advance table-hover table-striped table-checkable order-column" id="">
+    <thead>
+        <tr>
+            <th width='1%'>
+                <%= erp_datalist_check_all %>
+            </th>
+            <% if get_columns(params).include?("code") %>
+                <th class="sortable" sort-by='erp_stock_transfers_transfers.code'>
+                    <%= t('.code') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("received_at") %>
+                <th>
+                    <%= t('.received_at') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("source_warehouse") %>
+                <th>
+                    <%= t('.source_warehouse') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("destination_warehouse") %>
+                <th>
+                    <%= t('.destination_warehouse') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("quantity") %>
+                <th class="text-center">
+                    <%= t('.quantity') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("note") %>
+                <th class="text-center">
+                    <%= t('.note') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("status") %>
+                <th>
+                    <%= t('.status') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("creator") %>
+                <th class="text-center">
+                    <%= t('.creator') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("approver") %>
+                <th class="text-center">
+                    <%= t('.approver') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("created_at") %>
+                <th class="sortable" sort-by='erp_stock_transfers_transfers.created_at'>
+                    <%= t('.created_at') %>
+                </th>
+            <% end %>
+            <th width="7%"><%= t('.actions') %></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @transfers.each do |transfer| %>
+            <tr class="odd gradeX has-child-table" data-url="<%= erp_stock_transfers.transfer_details_backend_transfers_path(id: transfer.id) %>">
+                <td>
+                    <%= erp_datalist_check_row(id: transfer.id) %>
+                </td>
+                <% if get_columns(params).include?("code") %>
+                <td>
+                    <i class="fa fa-plus expand tr-expand-button"></i>
+                    <strong><%= link_to transfer.code, erp_stock_transfers.edit_backend_transfer_path(transfer) %></strong>
+                </td>
+                <% end %>
+                <% if get_columns(params).include?("received_at") %>
+                <td><%= transfer.received_at.strftime("%d/%m/%Y") %></td>
+                <% end %>
+                <% if get_columns(params).include?("source_warehouse") %>
+                <td><%= transfer.source_warehouse_name %></td>
+                <% end %>
+                <% if get_columns(params).include?("destination_warehouse") %>
+                <td><%= transfer.destination_warehouse_name %></td>
+                <% end %>
+                <% if get_columns(params).include?("quantity") %>
+                <td class="text-center"><%= transfer.total_quantity %></td>
+                <% end %>
+                <% if get_columns(params).include?("note") %>
+                <td><%= transfer.note %></td>
+                <% end %>
+                <% if get_columns(params).include?("status") %>
+                <td>
+                    received
+                </td>
+                <% end %>
+                <% if get_columns(params).include?("creator") %>
+                <td>
+                    <%= erp_component('avatar', {
+                        user: transfer.creator
+                    }) %>
+                </td>
+                <% end %>
+                <% if get_columns(params).include?("approver") %>
+                <td>
+                    <%= erp_component('avatar', {
+                        user: transfer.creator
+                    }) %>
+                </td>
+                <% end %>
+                <% if get_columns(params).include?("created_at") %>
+                <td><%= transfer.created_at.strftime("%d/%m/%Y") %></td>
+                <% end %>
+                <td>
+                    <%= erp_datalist_row_actions(
+                            [
+                                {
+                                    text: '<i class="fa fa-edit"></i> '+t('.edit'),
+                                    href: erp_stock_transfers.edit_backend_transfer_path(transfer)
+                                },
+                                {
+                                    divider: true
+                                },
+                                {
+                                    text: '<i class="fa fa-trash"></i> '+t('.delete'),
+                                    url: erp_stock_transfers.backend_transfer_path(transfer),
+                                    data_method: 'DELETE',
+                                    class: 'ajax-link',
+                                    data_confirm: t('.delete_confirm')
+                                }
+                            ]
+                        ) %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+<% if @transfers.empty? %>
+    <div class="datalist-empty-line"><%= t('.no_matching_records_found') %></div>
+<% end %>
+    
+<%= erp_datalist_pagination(@transfers) %>

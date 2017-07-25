@@ -1,0 +1,130 @@
+<%= form_for([erp_stock_transfers, :backend, transfer], html: {multipart: true}) do |f| %>
+    <div class="form-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-body form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <%= erp_form_control("text", {
+                                    name: 'transfer[code]',
+                                    value: transfer.code,
+                                    label: t('.code'),
+                                    help: t('.help_transfer_code'),
+                                    placeholder: t('.placeholder_transfer_code')
+                                }) %>
+                                <%= erp_form_control("dataselect", {
+                                    name: 'transfer[source_warehouse_id]',
+                                    value: transfer.source_warehouse_id,
+                                    text: transfer.source_warehouse_name,
+                                    placeholder: t('.choose_source_warehouse'),
+                                    label: t('.source_warehouse'),
+                                    url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+                                    required: true,
+                                    errors: transfer.errors.full_messages_for(:source_warehouse_id)
+                                }) %>
+                            </div>
+                            <% if Erp::Core.available?("warehouses") %>
+                                <div class="col-md-6">
+                                    <%= erp_form_control('date', {
+                                        label: t('.received_at'),
+                                        name: 'transfer[received_at]',
+                                        value: transfer.received_at,
+                                        placeholder: t('.choose_received_at'),
+                                        required: true,
+                                        errors: transfer.errors.full_messages_for(:received_at)
+                                    }) %>
+                                    <%= erp_form_control("dataselect", {
+                                        name: 'transfer[destination_warehouse_id]',
+                                        value: transfer.destination_warehouse_id,
+                                        text: transfer.destination_warehouse_name,
+                                        placeholder: t('.choose_destination_warehouse'),
+                                        label: t('.destination_warehouse'),
+                                        url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+                                        required: true,
+                                        errors: transfer.errors.full_messages_for(:destination_warehouse_id)
+                                    }) %>
+                                </div>
+                            <% end %>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <%= erp_form_control("textarea", {
+                                    name: 'transfer[note]',
+                                    value: transfer.note,
+                                    label: t('.note'),
+                                    placeholder: t('.enter_note')
+                                }) %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-body form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <%= erp_form_control("addableform", {
+                                    type: 'table',
+                                    add_button: t('.add'),
+                                    partial: 'erp/stock_transfers/backend/transfer_details/transfer_line_form',
+                                    partial_url: erp_stock_transfers.transfer_line_form_backend_transfer_details_path,
+                                    items: @transfer.transfer_details,
+                                    item: :transfer_detail,
+                                    add_control_selector: "input[name='product_id']",
+                                    add_control: erp_form_control("dataselect", {
+                                        name: 'product_id',
+                                        placeholder: t('.choose_product'),
+                                        label: t('.product'),
+                                        help: t('.help_product'),
+                                        url: erp_products.dataselect_backend_products_path(format: 'json'),
+                                        create: {
+                                            url: erp_products.new_backend_product_path,
+                                            title: t('.create_product'),
+                                            container_selector: '.new_product',
+                                            input_selector: 'input[name="product[name]"]'
+                                        },
+                                        edit: {
+                                            url: erp_products.edit_backend_product_path(id: ':value'),
+                                            title: t('.edit_product'),
+                                            container_selector: '.edit_product',
+                                        }
+                                    }),
+                                    thead: "<th>#{t('.product_code')}</th>
+                                            <th>#{t('.product_name')}</th>                                        
+                                            <th class='text-right'>#{t('.quantity')}</th>
+                                            <th class='text-right'>#{t('.current_stock_source')}</th>
+                                            <th title='#{t(".available_stock_at_source_after_transfer")}' class='text-right'>#{t('.after_stock_source')}</th>
+                                            <th class='text-right'>#{t('.current_stock_destination')}</th>
+                                            <th title='#{t(".available_stock_at_destination_after_transfer")}' class='text-right'>#{t('.after_stock_destination')}</th>
+                                            <th class='text-right'>#{t('.action')}</th>"
+                                }) %>
+                                
+                                <table class="table">
+                                    <tr>
+                                        <td width="90%" class="text-right text-semibold"><%= t(".quantity_total") %>:</td>
+                                        <td class="text-right">
+                                            <h4>
+                                                <span class="quantity_total text-bold"></span>
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%= erp_component('button/save', {
+        text: t('.submit')
+    }) %>
+    <%= erp_component('button/cancel', {
+        text: t('.cancel'),
+        href: erp_stock_transfers.backend_transfers_path
+    }) %>
+<% end %>
