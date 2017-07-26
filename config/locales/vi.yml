@@ -29,9 +29,8 @@ vi:
             creator: "Người tạo"
             approver: "Người duyệt"
             created_at: "Ngày tạo"
+            receive: "Chuyển kho"
           list:
-            edit: "Chỉnh sửa"
-            delete: "Xóa phiếu"
             delete_confirm: "Nội dung này sẽ bị xóa vĩnh viễn! Bạn có thực sự muốn xóa?"
             code: "Mã phiếu"
             received_at: "Ngày chuyển"
@@ -44,6 +43,9 @@ vi:
             approver: "Người duyệt"
             created_at: "Ngày tạo"
             actions: "Tùy chọn"
+            edit: "Chỉnh sửa"
+            receive: "Chuyển kho"
+            delete: "Xóa phiếu"
             no_matching_records_found: "Danh sách hiện không có kết quả nào được tìm thấy"
           new:
             transfers: "Chuyển kho"
