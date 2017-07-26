@@ -10,7 +10,7 @@ module Erp
         
         # POST /transfers/list
         def list
-          @transfers = Transfer.search(params).paginate(:page => params[:page], :per_page => 5)
+          @transfers = Transfer.search(params).paginate(:page => params[:page], :per_page => 10)
           
           render layout: nil
         end

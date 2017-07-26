@@ -14,11 +14,35 @@
     }) %>
 <% end %>
 
+<div class="row top-datalist">
+    <div class="col-md-12">
+        <%= erp_form_control('dateranges', {
+            form_group: 'no'
+        }) %>
+    </div>
+</div>
+
 <%= erp_datalist(
     url: erp_stock_transfers.list_backend_transfers_path,
     keywords: [
         {
-            text: t('.transfer_code'), name: 'erp_orders_orders.code'
+            text: t('.transfer_code'), name: 'erp_stock_transfers_transfers.code'
+        },
+        {
+            text: t('.source_warehouse'),
+            name: 'erp_warehouses_warehouses.name',
+            select: {
+                name: 'erp_stock_transfers_transfers.source_warehouse_id',
+                data_url: erp_warehouses.dataselect_backend_warehouses_path
+            }
+        },
+        {
+            text: t('.destination_warehouse'),
+            name: 'erp_warehouses_warehouses.name',
+            select: {
+                name: 'erp_stock_transfers_transfers.destination_warehouse_id',
+                data_url: erp_warehouses.dataselect_backend_warehouses_path
+            }
         },
         {
             text: t('creator'),
@@ -30,10 +54,28 @@
         }
     ],
     actions: [
-        
+        {
+            text: '<i class="fa fa-truck"></i> '+t('.receive'),
+            url: '',
+            data_method: 'PUT'
+        },
     ],
     filters: [
-        
+        {
+            text: t('.draft'), name: '', value: true, checked: false
+        },
+        {
+            text: t('.active'), name: '', value: true, checked: false
+        },
+        {
+            text: t('.received'), name: '', value: true, checked: false
+        },
+        {
+            text: t('.deleted'), name: '', value: true, checked: false
+        },
+        {
+            text: t('.void'), name: '', value: true, checked: false
+        }
     ],
     columns: [
         {
