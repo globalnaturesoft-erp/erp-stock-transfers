@@ -6,7 +6,7 @@ Erp::Contacts::Contact.where(name: "Ortho-K Vietnam").destroy_all
 owner = Erp::Contacts::Contact.create(
   contact_type: Erp::Contacts::Contact::TYPE_COMPANY,
   name: "Ortho-K Vietnam",
-  code: "#OTK-01C",
+  code: "OTK001",
   address: "535 An Duong Vuong, Ward 8, Dist.5, HCMC",
   creator_id: user.id
 )
