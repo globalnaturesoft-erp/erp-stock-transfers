@@ -43,7 +43,7 @@ module Erp
         # POST /transfers
         def create
           @transfer = Transfer.new(transfer_params)
-          @order.creator = current_user
+          @transfer.creator = current_user
     
           if @transfer.save
             if request.xhr?
