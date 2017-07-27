@@ -14,13 +14,15 @@
     }) %>
 <% end %>
 
-<div class="row top-datalist">
-    <div class="col-md-12">
-        <%= erp_form_control('dateranges', {
-            form_group: 'no'
-        }) %>
+<% content_for :global_filter do %>
+    <div class="row top-datalist">
+        <div class="col-md-3">
+            <%= erp_form_control('dateranges', {
+                name: ''
+            }) %>
+        </div>
     </div>
-</div>
+<% end %>
 
 <%= erp_datalist(
     url: erp_stock_transfers.list_backend_transfers_path,
