@@ -67,6 +67,7 @@ vi:
             approver: "Người duyệt"
             created_at: "Ngày tạo"
             actions: "Tùy chọn"
+            revert_stock_transfer: "Chuyển hoàn"
             edit: "Chỉnh sửa"
             receive: "Chuyển kho"
             delete: "Xóa phiếu"
@@ -127,3 +128,22 @@ vi:
             product_name: "Tên sản phẩm"
             quantity: "Số lượng chuyển"
             stock: "Tồn kho"
+  activerecord:
+    errors:
+      models:
+        erp/stock_transfers/transfer:
+          attributes:
+            code:
+              blank: "không được để trống."
+            received_at:
+              blank: "không được để trống."
+            source_warehouse_id:
+              blank: "không được để trống."
+            destination_warehouse_id:
+              blank: "không được để trống."
+    attributes:
+      erp/stock_transfers/transfer:
+        code: "Mã chuyển kho"
+        received_at: "Ngày chuyển kho"
+        source_warehouse_id: "Kho nguồn"
+        destination_warehouse_id: "Kho đến"

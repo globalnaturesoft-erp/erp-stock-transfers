@@ -118,21 +118,26 @@
                     <%= erp_datalist_row_actions(
                             [
                                 {
+                                    text: '<i class="fa fa-rotate-left"></i> '+t('.revert_stock_transfer'),
+                                    href: ''
+                                },
+                                {
                                     text: '<i class="fa fa-edit"></i> '+t('.edit'),
-                                    href: erp_stock_transfers.edit_backend_transfer_path(transfer)
+                                    href: erp_stock_transfers.edit_backend_transfer_path(transfer),
+                                    hide: (transfer.delivered? or transfer.deleted?)
                                 },
                                 {
                                     text: '<i class="fa fa-check-square-o"></i> '+t('.activate'),
                                     url: erp_stock_transfers.set_activate_backend_transfers_path(id: transfer),
                                     data_method: 'PUT',
-                                    hide: false,
+                                    hide: !transfer.draft?,
                                     class: 'ajax-link'
                                 },
                                 {
                                     text: '<i class="fa fa-truck"></i> '+t('.delivery'),
                                     url: erp_stock_transfers.set_delivery_backend_transfers_path(id: transfer),
                                     data_method: 'PUT',
-                                    hide: false,
+                                    hide: !transfer.active?,
                                     class: 'ajax-link',
                                     data_confirm: t('.delivery_confirm')
                                 },
@@ -143,13 +148,15 @@
                                     text: '<i class="fa fa-file-excel-o"></i> '+t('.export_excel'),
                                     url: '',
                                     data_method: '',
-                                    class: 'ajax-link'
+                                    class: 'ajax-link',
+                                    hide: transfer.deleted?
                                 },
                                 {
                                     text: '<i class="fa fa-file-pdf-o"></i> '+t('.export_pdf'),
                                     url: '',
                                     data_method: '',
-                                    class: 'ajax-link'
+                                    class: 'ajax-link',
+                                    hide: transfer.deleted?
                                 },
                                 {
                                     divider: true
@@ -159,7 +166,8 @@
                                     url: erp_stock_transfers.set_remove_backend_transfers_path(id: transfer),
                                     data_method: 'PUT',
                                     class: 'ajax-link',
-                                    data_confirm: t('.delete_confirm')
+                                    data_confirm: t('.delete_confirm'),
+                                    hide: transfer.deleted?
                                 }
                             ]
                         ) %>
