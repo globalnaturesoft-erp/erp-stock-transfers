@@ -1,5 +1,9 @@
 user = Erp::User.first
 warehouses = ["ADV", "TRAINING", "TN"]
+status = [Erp::StockTransfers::Transfer::STATUS_DRAFT,
+          Erp::StockTransfers::Transfer::STATUS_ACTIVE,
+          Erp::StockTransfers::Transfer::STATUS_DELIVERED,
+          Erp::StockTransfers::Transfer::STATUS_DELETED]
 
 # Contacts
 Erp::Contacts::Contact.where(name: "Ortho-K Vietnam").destroy_all
@@ -34,6 +38,7 @@ count_b = 0
     received_at: Time.now,
     source_warehouse_id: ws.first.id,
     destination_warehouse_id: ws.second.id,
+    status: status[rand(status.count)],
     creator_id: user.id
   )
   count_b += 1
