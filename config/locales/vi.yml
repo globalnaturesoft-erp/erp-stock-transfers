@@ -14,8 +14,24 @@ vi:
           update:
             success: "Phiếu chuyển kho đã được cập nhật thành công"
           destroy:
+            success: "Phiếu chuyển kho đã được xóa khỏi hệ thống"
+          set_activate:
+            success: "Phiếu chuyển kho đã được kích hoạt thành công"
+          set_delivery:
+            success: "Phiếu chuyển kho đã được chuyển thành công"
+          set_remove:
+            success: "Phiếu chuyển kho đã được xóa thành công"
+          set_activate_all:
+            success: "Phiếu chuyển kho đã được kích hoạt thành công"
+          set_delivery_all:
+            success: "Phiếu chuyển kho đã được chuyển thành công"
+          set_remove_all:
             success: "Phiếu chuyển kho đã được xóa thành công"
           index:
+            draft: "Lưu tạm"
+            active: "Hoạt động"
+            delivered: "Đã chuyển"
+            deleted: "Đã xóa"
             transfers: "Chuyển kho"
             create: "Tạo phiếu chuyển kho"
             transfer_code: "Mã phiếu"
@@ -29,7 +45,15 @@ vi:
             creator: "Người tạo"
             approver: "Người duyệt"
             created_at: "Ngày tạo"
-            receive: "Chuyển kho"
+            activate: "Kích hoạt"
+            delivery: "Chuyển kho"
+            delivery_confirm: "Bạn sẽ không thể chỉnh sửa sau khi xác nhận kho đã được chuyển. Bạn có muốn tiếp tục?"
+            delete: "Xóa phiếu"
+            delete_confirm: "Bạn sẽ không thể hoàn tác. Bạn có chắc chắn muốn xóa phiếu chuyển này không?"
+            transfer_from_date: "Ngày chuyển kho (từ)"
+            transfer_to_date: "Ngày chuyển kho (đến)"
+            select_from_date: "Chọn mốc thời gian từ..."
+            select_to_date: "Chọn mốc thời gian đến..."
           list:
             delete_confirm: "Nội dung này sẽ bị xóa vĩnh viễn! Bạn có thực sự muốn xóa?"
             code: "Mã phiếu"
@@ -46,7 +70,17 @@ vi:
             edit: "Chỉnh sửa"
             receive: "Chuyển kho"
             delete: "Xóa phiếu"
+            activate: "Kích hoạt"
+            delivery: "Chuyển kho"
+            delivery_confirm: "Bạn sẽ không thể chỉnh sửa sau khi xác nhận kho đã được chuyển. Bạn có muốn tiếp tục?"
+            delete_confirm: "Bạn sẽ không thể hoàn tác. Bạn có chắc chắn muốn xóa phiếu chuyển này không?"
             no_matching_records_found: "Danh sách hiện không có kết quả nào được tìm thấy"
+            export_excel: "Export Excel"
+            export_pdf: "Export PDF"
+            draft: "Lưu tạm"
+            active: "Hoạt động"
+            delivered: "Đã chuyển"
+            deleted: "Đã xóa"
           new:
             transfers: "Chuyển kho"
             create: "Tạo phiếu chuyển kho"

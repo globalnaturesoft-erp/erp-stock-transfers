@@ -7,6 +7,8 @@ class CreateErpStockTransfersTransfers < ActiveRecord::Migration[5.1]
       t.references :destination_warehouse, index: true, references: :erp_warehouses_warehouses
       t.references :creator, index: true, references: :erp_users
       t.text :note
+      t.string :status
+      t.decimal :cache_products_count
 
       t.timestamps
     end

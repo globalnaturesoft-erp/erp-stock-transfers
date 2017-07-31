@@ -17,8 +17,17 @@
 <% content_for :global_filter do %>
     <div class="row top-datalist">
         <div class="col-md-3">
-            <%= erp_form_control('dateranges', {
-                name: ''
+            <%= erp_form_control('date', {
+                label: t('.transfer_from_date'),
+                name: 'transfer_from_date',
+                placeholder: t('.select_from_date')
+            }) %>
+        </div>
+        <div class="col-md-3">
+            <%= erp_form_control('date', {
+                label: t('.transfer_to_date'),
+                name: 'transfer_to_date',
+                placeholder: t('.select_to_date')
             }) %>
         </div>
     </div>
@@ -57,26 +66,35 @@
     ],
     actions: [
         {
-            text: '<i class="fa fa-truck"></i> '+t('.receive'),
-            url: '',
+            text: '<i class="fa fa-check-square-o"></i> '+t('.activate'),
+            url: erp_stock_transfers.set_activate_all_backend_transfers_path,
             data_method: 'PUT'
         },
+        {
+            text: '<i class="fa fa-truck"></i> '+t('.delivery'),
+            url: erp_stock_transfers.set_delivery_all_backend_transfers_path,
+            data_method: 'PUT',
+            data_confirm: t('.delivery_confirm')
+        },
+        {
+            text: '<i class="fa fa-trash"></i> '+t('.delete'),
+            url: erp_stock_transfers.set_remove_all_backend_transfers_path,
+            data_method: 'PUT',
+            data_confirm: t('.delete_confirm')
+        }
     ],
     filters: [
         {
-            text: t('.draft'), name: '', value: true, checked: false
+            text: t('.draft'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DRAFT, checked: true
         },
         {
-            text: t('.active'), name: '', value: true, checked: false
+            text: t('.active'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_ACTIVE, checked: true
         },
         {
-            text: t('.received'), name: '', value: true, checked: false
+            text: t('.delivered'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DELIVERED, checked: false
         },
         {
-            text: t('.deleted'), name: '', value: true, checked: false
-        },
-        {
-            text: t('.void'), name: '', value: true, checked: false
+            text: t('.deleted'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DELETED, checked: false
         }
     ],
     columns: [

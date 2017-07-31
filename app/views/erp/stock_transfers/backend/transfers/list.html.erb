@@ -10,7 +10,7 @@
                 </th>
             <% end %>
             <% if get_columns(params).include?("received_at") %>
-                <th>
+                <th class="sortable" sort-by='erp_stock_transfers_transfers.received_at'>
                     <%= t('.received_at') %>
                 </th>
             <% end %>
@@ -25,7 +25,7 @@
                 </th>
             <% end %>
             <% if get_columns(params).include?("quantity") %>
-                <th class="text-center">
+                <th class="text-center sortable" sort-by='erp_stock_transfers_transfers.cache_products_count'>
                     <%= t('.quantity') %>
                 </th>
             <% end %>
@@ -79,14 +79,22 @@
                 <td><%= transfer.destination_warehouse_name %></td>
                 <% end %>
                 <% if get_columns(params).include?("quantity") %>
-                <td class="text-center"><%= transfer.total_quantity %></td>
+                <td class="text-center"><%= transfer.cache_products_count.to_i %></td>
                 <% end %>
                 <% if get_columns(params).include?("note") %>
                 <td><%= transfer.note %></td>
                 <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
-                    received
+                    <% if transfer.status == Erp::StockTransfers::Transfer::STATUS_DRAFT %>
+                        <span class="label label-sm label-default"><%= t('.draft') %></span>
+                    <% elsif transfer.status == Erp::StockTransfers::Transfer::STATUS_ACTIVE %>
+                        <span class="label label-sm label-success"><%= t('.active') %></span>
+                    <% elsif transfer.status == Erp::StockTransfers::Transfer::STATUS_DELIVERED %>
+                        <span class="label label-sm label-finished"><%= t('.delivered') %></span>
+                    <% elsif transfer.status == Erp::StockTransfers::Transfer::STATUS_DELETED %>
+                        <span class="label label-sm label-danger"><%= t('.deleted') %></span>
+                    <% end %>
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("creator") %>
@@ -114,16 +122,42 @@
                                     href: erp_stock_transfers.edit_backend_transfer_path(transfer)
                                 },
                                 {
-                                    text: '<i class="fa fa-truck"></i> '+t('.receive'),
-                                    href: ''
+                                    text: '<i class="fa fa-check-square-o"></i> '+t('.activate'),
+                                    url: erp_stock_transfers.set_activate_backend_transfers_path(id: transfer),
+                                    data_method: 'PUT',
+                                    hide: false,
+                                    class: 'ajax-link'
+                                },
+                                {
+                                    text: '<i class="fa fa-truck"></i> '+t('.delivery'),
+                                    url: erp_stock_transfers.set_delivery_backend_transfers_path(id: transfer),
+                                    data_method: 'PUT',
+                                    hide: false,
+                                    class: 'ajax-link',
+                                    data_confirm: t('.delivery_confirm')
+                                },
+                                {
+                                    divider: true
+                                },
+                                {
+                                    text: '<i class="fa fa-file-excel-o"></i> '+t('.export_excel'),
+                                    url: '',
+                                    data_method: '',
+                                    class: 'ajax-link'
+                                },
+                                {
+                                    text: '<i class="fa fa-file-pdf-o"></i> '+t('.export_pdf'),
+                                    url: '',
+                                    data_method: '',
+                                    class: 'ajax-link'
                                 },
                                 {
                                     divider: true
                                 },
                                 {
                                     text: '<i class="fa fa-trash"></i> '+t('.delete'),
-                                    url: erp_stock_transfers.backend_transfer_path(transfer),
-                                    data_method: 'DELETE',
+                                    url: erp_stock_transfers.set_remove_backend_transfers_path(id: transfer),
+                                    data_method: 'PUT',
                                     class: 'ajax-link',
                                     data_confirm: t('.delete_confirm')
                                 }

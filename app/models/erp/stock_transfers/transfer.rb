@@ -17,6 +17,14 @@ module Erp::StockTransfers
     has_many :transfer_details, inverse_of: :transfer, dependent: :destroy
     accepts_nested_attributes_for :transfer_details, :reject_if => lambda { |a| a[:product_id].blank? || a[:quantity].blank? || a[:quantity].to_i <= 0 }
     
+    after_save :update_cache_products_count
+    
+    # class const
+    STATUS_DRAFT = 'draft'
+    STATUS_ACTIVE = 'active'
+    STATUS_DELIVERED = 'delivered'
+    STATUS_DELETED = 'deleted'
+    
     # Filters
     def self.filter(query, params)
       params = params.to_unsafe_hash
@@ -65,14 +73,55 @@ module Erp::StockTransfers
     end
     
     def self.search(params)
-      query = self.order("created_at DESC")
+      query = self.all
       query = self.filter(query, params)
+      
+      # order
+      if params[:sort_by].present?
+        order = params[:sort_by]
+        order += " #{params[:sort_direction]}" if params[:sort_direction].present?
+
+        query = query.order(order)
+      else
+				query = query.order('created_at desc')
+      end
       
       return query
     end
     
+    # Set status for stock transfer
+    def set_activate
+      update_attributes(status: Erp::StockTransfers::Transfer::STATUS_ACTIVE)
+    end
+    
+    def set_delivery
+      update_attributes(status: Erp::StockTransfers::Transfer::STATUS_DELIVERED)
+    end
+    
+    def set_remove
+      update_attributes(status: Erp::StockTransfers::Transfer::STATUS_DELETED)
+    end
+    
+    def self.set_activate_all
+      update_all(status: Erp::StockTransfers::Transfer::STATUS_ACTIVE)
+    end
+    
+    def self.set_delivery_all
+      update_all(status: Erp::StockTransfers::Transfer::STATUS_DELIVERED)
+    end
+    
+    def self.set_remove_all
+      update_all(status: Erp::StockTransfers::Transfer::STATUS_DELETED)
+    end
+    
+    # Total item count for transfer details
     def total_quantity
 			return transfer_details.sum('quantity')
+		end
+    
+    # Update cache products count
+    def update_cache_products_count
+			self.update_column(:cache_products_count, self.total_quantity)
 		end
     
   end

@@ -3,6 +3,15 @@ module Erp::StockTransfers
     belongs_to :product, class_name: 'Erp::Products::Product'
     belongs_to :transfer, inverse_of: :transfer_details
     
+    after_save :update_transfer_cache_products_count
+    
+    # update order cache products count
+    def update_transfer_cache_products_count
+			if transfer.present?
+				transfer.update_cache_products_count
+			end
+		end
+    
     def product_code
       product.nil? ? '' : product.code
     end

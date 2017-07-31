@@ -5,6 +5,12 @@ Erp::StockTransfers::Engine.routes.draw do
         collection do
           post 'list'
           get 'transfer_details'
+          put 'set_activate'
+          put 'set_delivery'
+          put 'set_remove'
+          put 'set_activate_all'
+          put 'set_delivery_all'
+          put 'set_remove_all'
         end
       end
       resources :transfer_details do
