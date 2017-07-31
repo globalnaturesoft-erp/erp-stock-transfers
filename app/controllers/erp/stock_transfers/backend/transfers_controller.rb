@@ -3,7 +3,7 @@ module Erp
     module Backend
       class TransfersController < Erp::Backend::BackendController
         before_action :set_transfer, only: [:show, :edit, :update, :destroy,
-                                            :set_activate, :set_delivery, :set_remove]
+                                            :set_draft, :set_activate, :set_delivery, :set_remove]
         before_action :set_transfers, only: [:set_activate_all, :set_delivery_all, :set_remove_all]
     
         # GET /transfers
@@ -77,6 +77,7 @@ module Erp
         # PATCH/PUT /transfers/1
         def update
           if @transfer.update(transfer_params)
+            @transfer.set_draft
             if request.xhr?
               render json: {
                 status: 'success',

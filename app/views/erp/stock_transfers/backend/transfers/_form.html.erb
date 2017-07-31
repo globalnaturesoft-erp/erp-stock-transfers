@@ -11,7 +11,9 @@
                                     value: transfer.code,
                                     label: t('.code'),
                                     help: t('.help_transfer_code'),
-                                    placeholder: t('.placeholder_transfer_code')
+                                    placeholder: t('.placeholder_transfer_code'),
+                                    required: true,
+                                    errors: transfer.errors.full_messages_for(:code)
                                 }) %>
                                 <%= erp_form_control("dataselect", {
                                     name: 'transfer[source_warehouse_id]',

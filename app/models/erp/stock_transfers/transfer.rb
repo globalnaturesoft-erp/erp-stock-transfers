@@ -18,6 +18,9 @@ module Erp::StockTransfers
     accepts_nested_attributes_for :transfer_details, :reject_if => lambda { |a| a[:product_id].blank? || a[:quantity].blank? || a[:quantity].to_i <= 0 }
     
     after_save :update_cache_products_count
+    before_create :migrate_transfer_code
+    
+    validates :code, :received_at, :source_warehouse_id, :destination_warehouse_id, presence: true
     
     # class const
     STATUS_DRAFT = 'draft'
@@ -90,6 +93,10 @@ module Erp::StockTransfers
     end
     
     # Set status for stock transfer
+    def set_draft
+      update_attributes(status: Erp::StockTransfers::Transfer::STATUS_DRAFT)
+    end
+    
     def set_activate
       update_attributes(status: Erp::StockTransfers::Transfer::STATUS_ACTIVE)
     end
@@ -114,6 +121,23 @@ module Erp::StockTransfers
       update_all(status: Erp::StockTransfers::Transfer::STATUS_DELETED)
     end
     
+    # Check status true?
+    def draft?
+      self.status == Erp::StockTransfers::Transfer::STATUS_DRAFT ? true : false
+    end
+    
+    def active?
+      self.status == Erp::StockTransfers::Transfer::STATUS_ACTIVE ? true : false
+    end
+    
+    def delivered?
+      self.status == Erp::StockTransfers::Transfer::STATUS_DELIVERED ? true : false
+    end
+    
+    def deleted?
+      self.status == Erp::StockTransfers::Transfer::STATUS_DELETED ? true : false
+    end
+    
     # Total item count for transfer details
     def total_quantity
 			return transfer_details.sum('quantity')
@@ -122,6 +146,17 @@ module Erp::StockTransfers
     # Update cache products count
     def update_cache_products_count
 			self.update_column(:cache_products_count, self.total_quantity)
+		end
+    
+    # Migrate transfer code
+    def migrate_transfer_code
+			lastest = Transfer.all.order("id DESC").first
+			if !lastest.nil?
+				num = lastest.id.to_i + 1
+				self.code = "ST" + num.to_s.rjust(3, '0')
+			else
+				self.code = "ST" + 1.to_s.rjust(3, '0')
+			end
 		end
     
   end
