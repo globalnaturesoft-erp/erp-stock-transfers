@@ -1,31 +1,8 @@
 user = Erp::User.first
-warehouses = ["ADV", "TRAINING", "TN"]
 status = [Erp::StockTransfers::Transfer::STATUS_DRAFT,
           Erp::StockTransfers::Transfer::STATUS_ACTIVE,
           Erp::StockTransfers::Transfer::STATUS_DELIVERED,
           Erp::StockTransfers::Transfer::STATUS_DELETED]
-
-# Contacts
-Erp::Contacts::Contact.where(name: "Ortho-K Vietnam").destroy_all
-owner = Erp::Contacts::Contact.create(
-  contact_type: Erp::Contacts::Contact::TYPE_COMPANY,
-  name: "Ortho-K Vietnam",
-  code: "OTK001",
-  address: "535 An Duong Vuong, Ward 8, Dist.5, HCMC",
-  creator_id: user.id
-)
-puts owner.errors.to_json if !owner.errors.empty?
-
-# Warehouses
-Erp::Warehouses::Warehouse.all.destroy_all
-warehouses.each do |name|
-  wh = Erp::Warehouses::Warehouse.create(
-    name: name,
-    short_name: name,
-    creator_id: user.id,
-    contact_id: owner.id
-  )
-end
 
 # Stock Transfers
 Erp::StockTransfers::Transfer.all.destroy_all
