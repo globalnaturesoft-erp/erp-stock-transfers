@@ -1,5 +1,4 @@
 <div class="col-md-12">
-    
         <div class="portlet-title">
             <div class="caption">
                 <i class="glyphicon glyphicon-transfer"></i>
@@ -15,20 +14,28 @@
                         <tr>
                             <th width="20%" class="text-left"><%= t('.product_code') %></th>
                             <th class="numeric text-left"><%= t('.product_name') %></th>
-                            <th class="numeric text-right"><%= t('.quantity') %></th>
-                            <th class="numeric text-right"><%= t('.stock') + ' (' + @transfer.source_warehouse_name + ')' %></th>
-                            <th class="numeric text-right"><%= t('.stock') + ' (' + @transfer.destination_warehouse_name + ')' %></th>
+                            <th class="numeric text-center"><%= t('.quantity') %></th>
+                            <th class="numeric text-center"><%= t('.stock') + ' (' + @transfer.source_warehouse_name + ')' %></th>
+                            <th class="numeric text-center"><%= t('.stock') + ' (' + @transfer.destination_warehouse_name + ')' %></th>
                         </tr>
                     </thead>
                     <tbody>
                         <% @transfer.transfer_details.each do |transfer_detail| %>
-                        <tr>
-                            <td class="text-left"><strong><%= transfer_detail.product_code %></strong></td>
-                            <td class="numeric text-left"><%= transfer_detail.product_name %></td>
-                            <td class="numeric text-right"><%= format_number(transfer_detail.quantity) %></td>
-                            <td class="numeric text-right"><%= transfer_detail.stock_source %></td>
-                            <td class="numeric text-right"><%= transfer_detail.stock_destination %></td>
-                        </tr>
+                            <%
+                                from = rand(transfer_detail.quantity..9)
+                                to = rand(0..1)
+                            %>
+                            <tr>
+                                <td class="text-left"><strong><%= transfer_detail.product_code %></strong></td>
+                                <td class="numeric text-left"><%= transfer_detail.product_name %></td>
+                                <td class="numeric text-center"><%= format_number(transfer_detail.quantity) %></td>
+                                <td class="numeric text-center">
+                                    <%= from - transfer_detail.quantity %>
+                                </td>
+                                <td class="numeric text-center">
+                                    <%= to + transfer_detail.quantity %>
+                                </td>
+                            </tr>
                         <% end %>
                     </tbody>
                 </table>
