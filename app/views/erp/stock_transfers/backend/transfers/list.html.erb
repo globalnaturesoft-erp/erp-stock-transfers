@@ -59,18 +59,18 @@
     </thead>
     <tbody>
         <% @transfers.each do |transfer| %>
-            <tr class="odd gradeX has-child-table" data-url="<%= erp_stock_transfers.transfer_details_backend_transfers_path(id: transfer.id) %>">
+            <tr class="<%= 'blurred' if transfer.is_deleted? %> odd gradeX has-child-table" data-url="<%= erp_stock_transfers.transfer_details_backend_transfers_path(id: transfer.id) %>">
                 <td>
                     <%= erp_datalist_check_row(id: transfer.id) %>
                 </td>
                 <% if get_columns(params).include?("code") %>
                 <td>
                     <i class="fa fa-plus expand tr-expand-button"></i>
-                    <strong><%= link_to transfer.code, erp_stock_transfers.edit_backend_transfer_path(transfer) %></strong>
+                    <strong><%= transfer.code %></strong>
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("received_at") %>
-                <td><%= transfer.received_at.strftime("%d/%m/%Y") %></td>
+                <td><%= format_date(transfer.received_at) %></td>
                 <% end %>
                 <% if get_columns(params).include?("source_warehouse") %>
                 <td><%= transfer.source_warehouse_name %></td>
@@ -86,15 +86,7 @@
                 <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
-                    <% if transfer.status == Erp::StockTransfers::Transfer::STATUS_DRAFT %>
-                        <span class="label label-sm label-default"><%= t('.draft') %></span>
-                    <% elsif transfer.status == Erp::StockTransfers::Transfer::STATUS_ACTIVE %>
-                        <span class="label label-sm label-success"><%= t('.active') %></span>
-                    <% elsif transfer.status == Erp::StockTransfers::Transfer::STATUS_DELIVERED %>
-                        <span class="label label-sm label-finished"><%= t('.delivered') %></span>
-                    <% elsif transfer.status == Erp::StockTransfers::Transfer::STATUS_DELETED %>
-                        <span class="label label-sm label-danger"><%= t('.deleted') %></span>
-                    <% end %>
+                    <%= status_label(transfer.status) %>
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("creator") %>
@@ -112,65 +104,10 @@
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("created_at") %>
-                <td><%= transfer.created_at.strftime("%d/%m/%Y") %></td>
+                <td><%= format_date(transfer.created_at) %></td>
                 <% end %>
                 <td>
-                    <%= erp_datalist_row_actions(
-                            [
-                                {
-                                    text: '<i class="fa fa-rotate-left"></i> '+t('.revert_stock_transfer'),
-                                    href: ''
-                                },
-                                {
-                                    text: '<i class="fa fa-edit"></i> '+t('.edit'),
-                                    href: erp_stock_transfers.edit_backend_transfer_path(transfer),
-                                    hide: (transfer.delivered? or transfer.deleted?)
-                                },
-                                {
-                                    text: '<i class="fa fa-check-square-o"></i> '+t('.activate'),
-                                    url: erp_stock_transfers.set_activate_backend_transfers_path(id: transfer),
-                                    data_method: 'PUT',
-                                    hide: !transfer.draft?,
-                                    class: 'ajax-link'
-                                },
-                                {
-                                    text: '<i class="fa fa-truck"></i> '+t('.delivery'),
-                                    url: erp_stock_transfers.set_delivery_backend_transfers_path(id: transfer),
-                                    data_method: 'PUT',
-                                    hide: !transfer.active?,
-                                    class: 'ajax-link',
-                                    data_confirm: t('.delivery_confirm')
-                                },
-                                {
-                                    divider: true
-                                },
-                                {
-                                    text: '<i class="fa fa-file-excel-o"></i> '+t('.export_excel'),
-                                    url: '',
-                                    data_method: '',
-                                    class: 'ajax-link',
-                                    hide: transfer.deleted?
-                                },
-                                {
-                                    text: '<i class="fa fa-file-pdf-o"></i> '+t('.export_pdf'),
-                                    url: '',
-                                    data_method: '',
-                                    class: 'ajax-link',
-                                    hide: transfer.deleted?
-                                },
-                                {
-                                    divider: true
-                                },
-                                {
-                                    text: '<i class="fa fa-trash"></i> '+t('.delete'),
-                                    url: erp_stock_transfers.set_remove_backend_transfers_path(id: transfer),
-                                    data_method: 'PUT',
-                                    class: 'ajax-link',
-                                    data_confirm: t('.delete_confirm'),
-                                    hide: transfer.deleted?
-                                }
-                            ]
-                        ) %>
+                    <%= stock_transfer_dropdown_actions(transfer) %>
                 </td>
             </tr>
         <% end %>
