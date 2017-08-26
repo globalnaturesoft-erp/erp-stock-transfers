@@ -14,14 +14,6 @@ module Erp
         def list
           @transfers = Transfer.search(params).paginate(:page => params[:page], :per_page => 10)
 
-          if params.to_unsafe_hash[:global_filter].present? and params.to_unsafe_hash[:global_filter][:transfer_from_date].present?
-            @transfers = @transfers.where('received_at >= ?', params.to_unsafe_hash[:global_filter][:transfer_from_date].to_date.beginning_of_day)
-          end
-
-          if params.to_unsafe_hash[:global_filter].present? and params.to_unsafe_hash[:global_filter][:transfer_to_date].present?
-            @transfers = @transfers.where('received_at <= ?', params.to_unsafe_hash[:global_filter][:transfer_to_date].to_date.end_of_day)
-          end
-
           render layout: nil
         end
 
@@ -80,6 +72,7 @@ module Erp
 
         # GET /transfers/1/edit
         def edit
+          authorize! :update, @transfer
         end
 
         # POST /transfers
@@ -142,6 +135,7 @@ module Erp
 
         # Activate /transfers/status?id=1
         def set_activate
+          authorize! :activate, @transfer
           @transfer.set_activate
 
           respond_to do |format|
@@ -156,6 +150,7 @@ module Erp
 
         # Delivery /transfers/status?id=1
         def set_delivery
+          authorize! :delivery, @transfer
           @transfer.set_delivery
 
           respond_to do |format|
@@ -170,6 +165,7 @@ module Erp
 
         # Remove /transfers/status?id=1
         def set_remove
+          authorize! :delete, @transfer
           @transfer.set_remove
 
           respond_to do |format|
@@ -184,6 +180,7 @@ module Erp
 
         # ACTIVATE ALL /transfers/status?ids=1,2,3
         def set_activate_all
+          authorize! :activate, @transfer
           @transfers.set_activate_all
 
           respond_to do |format|
@@ -198,6 +195,7 @@ module Erp
 
         # DELIVERY ALL /transfers/status?ids=1,2,3
         def set_delivery_all
+          authorize! :delivery, @transfer
           @transfers.set_delivery_all
 
           respond_to do |format|
@@ -212,6 +210,7 @@ module Erp
 
         # REMOVE ALL /transfers/status?ids=1,2,3
         def set_remove_all
+          authorize! :delete, @transfer
           @transfers.set_remove_all
 
           respond_to do |format|
