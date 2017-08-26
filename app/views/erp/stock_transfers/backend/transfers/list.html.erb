@@ -79,7 +79,7 @@
                 <td><%= transfer.destination_warehouse_name %></td>
                 <% end %>
                 <% if get_columns(params).include?("quantity") %>
-                <td class="text-center"><%= transfer.cache_products_count.to_i %></td>
+                <td class="text-center"><%= transfer.cache_products_count %></td>
                 <% end %>
                 <% if get_columns(params).include?("note") %>
                 <td><%= transfer.note %></td>

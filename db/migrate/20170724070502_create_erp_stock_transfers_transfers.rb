@@ -8,7 +8,7 @@ class CreateErpStockTransfersTransfers < ActiveRecord::Migration[5.1]
       t.references :creator, index: true, references: :erp_users
       t.text :note
       t.string :status
-      t.decimal :cache_products_count
+      t.integer :cache_products_count
 
       t.timestamps
     end
