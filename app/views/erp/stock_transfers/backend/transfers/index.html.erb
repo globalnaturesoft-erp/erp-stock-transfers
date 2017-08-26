@@ -30,6 +30,22 @@
                 placeholder: t('.select_to_date')
             }) %>
         </div>
+        <div class="col-md-3">
+            <%= erp_form_control("dataselect", {
+                name: 'source_warehouse',
+                label: t('.filter_source_warehouse'),
+                placeholder: t('.choose_source_warehouse'),
+                url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+            }) %>
+        </div>
+        <div class="col-md-3">
+            <%= erp_form_control("dataselect", {
+                name: 'destination_warehouse',
+                label: t('.filter_destination_warehouse'),
+                placeholder: t('.choose_destination_warehouse'),
+                url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+            }) %>
+        </div>
     </div>
 <% end %>
 
@@ -37,23 +53,10 @@
     url: erp_stock_transfers.list_backend_transfers_path,
     keywords: [
         {
+            text: t('.keywords'), name: ''
+        },
+        {
             text: t('.transfer_code'), name: 'erp_stock_transfers_transfers.code'
-        },
-        {
-            text: t('.source_warehouse'),
-            name: 'erp_warehouses_warehouses.name',
-            select: {
-                name: 'erp_stock_transfers_transfers.source_warehouse_id',
-                data_url: erp_warehouses.dataselect_backend_warehouses_path
-            }
-        },
-        {
-            text: t('.destination_warehouse'),
-            name: 'erp_warehouses_warehouses.name',
-            select: {
-                name: 'erp_stock_transfers_transfers.destination_warehouse_id',
-                data_url: erp_warehouses.dataselect_backend_warehouses_path
-            }
         },
         {
             text: t('creator'),
@@ -88,7 +91,7 @@
             text: t('.draft'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DRAFT, checked: true
         },
         {
-            text: t('.active'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_ACTIVE, checked: true
+            text: t('.active'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_ACTIVE, checked: false
         },
         {
             text: t('.delivered'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DELIVERED, checked: false

@@ -66,10 +66,31 @@ module Erp::StockTransfers
       # add conditions to query
       query = query.where(and_conds.join(' AND ')) if !and_conds.empty?
       
-      # search by a received at
-      if params[:date].present?
-				date = params[:date].to_date
-				query = query.where("received_at >= ? AND received_at <= ?", date.beginning_of_day, date.end_of_day)
+      # global filters
+      global_filter = params[:global_filter]
+      
+      if global_filter.present?
+				
+				# filter by transfer from date
+				if global_filter[:transfer_from_date].present?
+					query = query.where('received_at >= ?', global_filter[:transfer_from_date].to_date.beginning_of_day)
+				end
+				
+				# filter by transfer to date
+				if global_filter[:transfer_to_date].present?
+					query = query.where('received_at <= ?', global_filter[:transfer_to_date].to_date.end_of_day)
+				end
+				
+				# filter by source warehouse
+				if global_filter[:source_warehouse].present?
+					query = query.where(source_warehouse_id: global_filter[:source_warehouse])
+				end
+				
+				# filter by destination warehouse
+				if global_filter[:destination_warehouse].present?
+					query = query.where(destination_warehouse_id: global_filter[:destination_warehouse])
+				end
+				
 			end
       
       return query
@@ -122,20 +143,20 @@ module Erp::StockTransfers
     end
     
     # Check status true?
-    def draft?
-      self.status == Erp::StockTransfers::Transfer::STATUS_DRAFT ? true : false
+    def is_draft?
+      return self.status == Erp::StockTransfers::Transfer::STATUS_DRAFT
     end
     
-    def active?
-      self.status == Erp::StockTransfers::Transfer::STATUS_ACTIVE ? true : false
+    def is_active?
+      return self.status == Erp::StockTransfers::Transfer::STATUS_ACTIVE
     end
     
-    def delivered?
-      self.status == Erp::StockTransfers::Transfer::STATUS_DELIVERED ? true : false
+    def is_delivered?
+      return self.status == Erp::StockTransfers::Transfer::STATUS_DELIVERED
     end
     
-    def deleted?
-      self.status == Erp::StockTransfers::Transfer::STATUS_DELETED ? true : false
+    def is_deleted?
+      return self.status == Erp::StockTransfers::Transfer::STATUS_DELETED
     end
     
     # Total item count for transfer details
