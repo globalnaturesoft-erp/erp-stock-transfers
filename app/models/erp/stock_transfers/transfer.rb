@@ -18,9 +18,10 @@ module Erp::StockTransfers
     accepts_nested_attributes_for :transfer_details, :reject_if => lambda { |a| a[:product_id].blank? || a[:quantity].blank? || a[:quantity].to_i <= 0 }
     
     after_save :update_cache_products_count
-    before_create :migrate_transfer_code
+    after_save :generate_code
     
-    validates :code, :received_at, :source_warehouse_id, :destination_warehouse_id, presence: true
+    validates :code, uniqueness: true
+    validates :received_at, :source_warehouse_id, :destination_warehouse_id, presence: true
     
     # class const
     STATUS_DRAFT = 'draft'
@@ -169,14 +170,10 @@ module Erp::StockTransfers
 			self.update_column(:cache_products_count, self.total_quantity)
 		end
     
-    # Migrate transfer code
-    def migrate_transfer_code
-			lastest = Transfer.all.order("id DESC").first
-			if !lastest.nil?
-				num = lastest.id.to_i + 1
-				self.code = "ST" + num.to_s.rjust(3, '0')
-			else
-				self.code = "ST" + 1.to_s.rjust(3, '0')
+    # Generate code
+    def generate_code
+			if !code.present?
+				update_columns(code: 'ST' + id.to_s.rjust(5, '0'))
 			end
 		end
     
