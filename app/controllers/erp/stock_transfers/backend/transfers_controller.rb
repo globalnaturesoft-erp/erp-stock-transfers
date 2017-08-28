@@ -2,7 +2,7 @@ module Erp
   module StockTransfers
     module Backend
       class TransfersController < Erp::Backend::BackendController
-        before_action :set_transfer, only: [:show, :edit, :update, :destroy,
+        before_action :set_transfer, only: [:show, :edit, :update, :destroy, :transfer_details,
                                             :set_draft, :set_activate, :set_delivery, :set_remove]
         before_action :set_transfers, only: [:set_activate_all, :set_delivery_all, :set_remove_all]
 
@@ -19,8 +19,6 @@ module Erp
 
         # GET /transfer details
         def transfer_details
-          @transfer = Transfer.find(params[:id])
-
           render layout: nil
         end
 
@@ -31,7 +29,7 @@ module Erp
         # GET /transfers/new
         def new
           @transfer = Transfer.new
-          @transfer.received_at = Time.now
+          @transfer.received_at = Time.current
 
           if params[:from_warehouse].present?
             @from_warehouse = params[:from_warehouse].present? ? Erp::Warehouses::Warehouse.find(params[:from_warehouse]) : nil
@@ -79,7 +77,7 @@ module Erp
         def create
           @transfer = Transfer.new(transfer_params)
           @transfer.creator = current_user
-          @transfer.status = Transfer::STATUS_DRAFT
+          @transfer.set_draft
 
           if @transfer.save
             if request.xhr?
