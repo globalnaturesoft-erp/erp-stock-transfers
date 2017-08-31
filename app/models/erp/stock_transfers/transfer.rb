@@ -15,7 +15,7 @@ module Erp::StockTransfers
       end
 		end
     has_many :transfer_details, inverse_of: :transfer, dependent: :destroy
-    accepts_nested_attributes_for :transfer_details, :reject_if => lambda { |a| a[:product_id].blank? || a[:quantity].blank? || a[:quantity].to_i <= 0 }
+    accepts_nested_attributes_for :transfer_details, :reject_if => lambda { |a| a[:product_id].blank? || a[:quantity].blank? || a[:quantity].to_i <= 0 }, :allow_destroy => true
     
     after_save :update_cache_products_count
     after_save :generate_code
