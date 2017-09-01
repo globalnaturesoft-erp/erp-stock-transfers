@@ -71,7 +71,7 @@ vi:
             creator: "Người tạo"
             approver: "Người duyệt"
             created_at: "Ngày tạo"
-            actions: "Tùy chọn"
+            actions: "Thao tác"
             revert_stock_transfer: "Chuyển hoàn"
             edit: "Chỉnh sửa"
             receive: "Chuyển kho"
