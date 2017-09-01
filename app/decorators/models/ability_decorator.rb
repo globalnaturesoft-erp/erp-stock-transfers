@@ -1,5 +1,5 @@
 Erp::Ability.class_eval do
-  def orders_ability(user)
+  def stock_transfers_ability(user)
     
     can :activate, Erp::StockTransfers::Transfer do |transfer|
       transfer.is_draft? or transfer.is_deleted?
