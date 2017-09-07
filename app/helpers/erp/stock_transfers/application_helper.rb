@@ -6,10 +6,6 @@ module Erp
       def stock_transfer_dropdown_actions(transfer)
         actions = []
         actions << {
-          text: '<i class="fa fa-rotate-left"></i> '+t('.revert_stock_transfer'),
-          href: ''
-        }
-        actions << {
           text: '<i class="fa fa-edit"></i> '+t('.edit'),
           href: erp_stock_transfers.edit_backend_transfer_path(transfer)
         }

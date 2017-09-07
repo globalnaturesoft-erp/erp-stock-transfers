@@ -234,7 +234,7 @@ module Erp
           # Only allow a trusted parameter "white list" through.
           def transfer_params
             params.fetch(:transfer, {}).permit(:code, :received_at, :source_warehouse_id, :destination_warehouse_id, :note,
-                                               :transfer_details_attributes => [ :id, :product_id, :transfer_id, :quantity, :_destroy ])
+                                               :transfer_details_attributes => [ :id, :product_id, :transfer_id, :quantity, :state_id, :_destroy ])
           end
       end
     end

@@ -16,13 +16,13 @@ vi:
           destroy:
             success: "Phiếu chuyển kho đã được xóa khỏi hệ thống"
           set_activate:
-            success: "Phiếu chuyển kho đã được kích hoạt thành công"
+            success: "Phiếu chuyển kho đã được xác nhận thành công"
           set_delivery:
             success: "Phiếu chuyển kho đã được chuyển thành công"
           set_remove:
             success: "Phiếu chuyển kho đã được xóa thành công"
           set_activate_all:
-            success: "Phiếu chuyển kho đã được kích hoạt thành công"
+            success: "Phiếu chuyển kho đã được xác nhận thành công"
           set_delivery_all:
             success: "Phiếu chuyển kho đã được chuyển thành công"
           set_remove_all:
@@ -45,7 +45,7 @@ vi:
             creator: "Người tạo"
             approver: "Người duyệt"
             created_at: "Ngày tạo"
-            activate: "Kích hoạt"
+            activate: "Xác nhận"
             delivery: "Chuyển kho"
             delivery_confirm: "Bạn sẽ không thể chỉnh sửa sau khi xác nhận kho đã được chuyển. Bạn có muốn tiếp tục?"
             delete: "Xóa phiếu"
@@ -76,7 +76,7 @@ vi:
             edit: "Chỉnh sửa"
             receive: "Chuyển kho"
             delete: "Xóa phiếu"
-            activate: "Kích hoạt"
+            activate: "Xác nhận"
             delivery: "Chuyển kho"
             delivery_confirm: "Bạn sẽ không thể chỉnh sửa sau khi xác nhận kho đã được chuyển. Bạn có muốn tiếp tục?"
             delete_confirm: "Bạn sẽ không thể hoàn tác. Bạn có chắc chắn muốn xóa phiếu chuyển này không?"
@@ -117,6 +117,7 @@ vi:
             quantity: "Số lượng"
             current_stock_source: "Tồn kho nguồn"
             after_stock_source: "Kho nguồn (sau)"
+            state: "Tình trạng sản phẩm"
             available_stock_at_source_after_transfer: "Số lượng tồn kho của kho nguồn sau khi chuyển"
             current_stock_destination: "Tồn kho đích"
             after_stock_destination: "Kho đích (sau)"
@@ -135,6 +136,9 @@ vi:
             diameter: "Đường kính"
             quantity: "Số lượng chuyển"
             stock: "Tồn kho"
+        transfer_details:
+          transfer_line_form:
+            choose_state: "Trạng thái của sản phẩm"
   activerecord:
     errors:
       models:

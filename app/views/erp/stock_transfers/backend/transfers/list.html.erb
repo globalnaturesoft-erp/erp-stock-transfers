@@ -9,11 +9,6 @@
                     <%= t('.code') %>
                 </th>
             <% end %>
-            <% if get_columns(params).include?("received_at") %>
-                <th class="sortable" sort-by='erp_stock_transfers_transfers.received_at'>
-                    <%= t('.received_at') %>
-                </th>
-            <% end %>
             <% if get_columns(params).include?("source_warehouse") %>
                 <th>
                     <%= t('.source_warehouse') %>
@@ -34,6 +29,11 @@
                     <%= t('.note') %>
                 </th>
             <% end %>
+            <% if get_columns(params).include?("received_at") %>
+                <th class="sortable" sort-by='erp_stock_transfers_transfers.received_at'>
+                    <%= t('.received_at') %>
+                </th>
+            <% end %>
             <% if get_columns(params).include?("status") %>
                 <th>
                     <%= t('.status') %>
@@ -42,11 +42,6 @@
             <% if get_columns(params).include?("creator") %>
                 <th class="text-center">
                     <%= t('.creator') %>
-                </th>
-            <% end %>
-            <% if get_columns(params).include?("approver") %>
-                <th class="text-center">
-                    <%= t('.approver') %>
                 </th>
             <% end %>
             <% if get_columns(params).include?("created_at") %>
@@ -69,9 +64,6 @@
                     <strong><%= transfer.code %></strong>
                 </td>
                 <% end %>
-                <% if get_columns(params).include?("received_at") %>
-                <td><%= format_date(transfer.received_at) %></td>
-                <% end %>
                 <% if get_columns(params).include?("source_warehouse") %>
                 <td><%= transfer.source_warehouse_name %></td>
                 <% end %>
@@ -84,19 +76,15 @@
                 <% if get_columns(params).include?("note") %>
                 <td><%= transfer.note %></td>
                 <% end %>
+                <% if get_columns(params).include?("received_at") %>
+                <td><%= format_date(transfer.received_at) %></td>
+                <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
                     <%= status_label(transfer.status) %>
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("creator") %>
-                <td>
-                    <%= erp_component('avatar', {
-                        user: transfer.creator
-                    }) %>
-                </td>
-                <% end %>
-                <% if get_columns(params).include?("approver") %>
                 <td>
                     <%= erp_component('avatar', {
                         user: transfer.creator

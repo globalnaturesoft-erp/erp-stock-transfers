@@ -2,6 +2,7 @@ module Erp::StockTransfers
   class TransferDetail < ApplicationRecord
     belongs_to :product, class_name: 'Erp::Products::Product'
     belongs_to :transfer, inverse_of: :transfer_details
+    belongs_to :state, class_name: 'Erp::Products::State'
     
     after_save :update_transfer_cache_products_count
     
@@ -19,6 +20,10 @@ module Erp::StockTransfers
     def product_name
       product.nil? ? '' : product.name
     end
+    
+    def state_name
+			state.nil? ? '' : state.name
+		end
     
     # @todo: hard code for stock_source and stock_destination
     # Available stock at source

@@ -91,10 +91,10 @@
             text: t('.draft'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DRAFT, checked: true
         },
         {
-            text: t('.active'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_ACTIVE, checked: false
+            text: t('.active'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_ACTIVE, checked: true
         },
         {
-            text: t('.delivered'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DELIVERED, checked: false
+            text: t('.delivered'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DELIVERED, checked: true
         },
         {
             text: t('.deleted'), name: 'erp_stock_transfers_transfers.status', value: Erp::StockTransfers::Transfer::STATUS_DELETED, checked: false
@@ -103,9 +103,6 @@
     columns: [
         {
             text: t('.code'), name: 'code', value: true, checked: true
-        },
-        {
-            text: t('.received_at'), name: 'received_at', value: true, checked: true
         },
         {
             text: t('.source_warehouse'), name: 'source_warehouse', value: true, checked: true
@@ -120,13 +117,13 @@
             text: t('.note'), name: 'note', value: true, checked: false
         },
         {
+            text: t('.received_at'), name: 'received_at', value: true, checked: true
+        },
+        {
             text: t('.status'), name: 'status', value: true, checked: true
         },
         {
-            text: t('.creator'), name: 'creator', value: true, checked: true
-        },
-        {
-            text: t('.approver'), name: 'approver', value: true, checked: true
+            text: t('.creator'), name: 'creator', value: true, checked: false
         },
         {
             text: t('.created_at'), name: 'created_at', value: true, checked: false
