@@ -173,7 +173,7 @@ module Erp::StockTransfers
     # Generate code
     def generate_code
 			if !code.present?
-				update_columns(code: 'ST' + id.to_s.rjust(5, '0'))
+				update_columns(code: 'CK' + received_at.strftime("%Y").last(2) + received_at.strftime("%m") + "-" + id.to_s.rjust(3, '0'))
 			end
 		end
     
