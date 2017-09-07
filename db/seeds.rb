@@ -20,7 +20,8 @@ Erp::StockTransfers::Transfer.all.destroy_all
     dd = Erp::StockTransfers::TransferDetail.create(
       product_id: product.id,
       transfer_id: transfer.id,
-      quantity: rand(1..3)
+      quantity: rand(1..3),
+      state_id: Erp::Products::State.order("RANDOM()").first.id
     )
   end
 end
