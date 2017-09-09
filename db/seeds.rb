@@ -24,4 +24,5 @@ Erp::StockTransfers::Transfer.all.destroy_all
       state_id: Erp::Products::State.order("RANDOM()").first.id
     )
   end
+  puts '==== Stock transfer ' +num.ordinalize+ ' complete ('+transfer.code+') ===='
 end
