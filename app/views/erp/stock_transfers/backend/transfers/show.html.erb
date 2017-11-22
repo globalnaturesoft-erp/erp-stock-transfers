@@ -1,0 +1,61 @@
+<% content_for :title do %>
+    <%= t('.show') %> # <%= @transfer.code %>
+<% end %>
+
+<% content_for :page_title do %>
+    <a href="
+        <%= erp_stock_transfers.backend_transfers_path %>
+    ">
+    <i class="glyphicon glyphicon-transfer"></i> <%= t('.transfers') %>
+    </a> / <%= t('.show_transfer') %> # <%= @transfer.code %>
+    <%= status_label(@transfer.status) %>
+<% end %>
+
+<% content_for :page_toolbar do %>
+
+    <%= erp_component('button/actions', {
+        actions:
+        [
+            {
+                text: '<i class="fa fa-edit"></i> '+t('.edit'),
+                url: erp_stock_transfers.edit_backend_transfer_path(@transfer),
+                hide: false,
+            },
+            {
+                text: '<i class="fa fa-close"></i> '+t('.delete'),
+                href: erp_stock_transfers.set_remove_backend_transfers_path(id: @transfer.id),
+                data_method: 'PUT',
+                data_confirm: t('.delete_confirm'),
+                hide: false,
+                class: 'ajax-link'
+            }
+        ],
+        text: t('.options'),
+        class: 'btn-noborder'
+    }) %>
+    
+<% end %>
+
+<%= erp_datalist(
+    url: erp_stock_transfers.show_list_backend_transfers_path(id: @transfer.id),
+    columns: [
+        {
+            text: t('.ordinal_number'), name: 'ordinal_number', value: true, checked: true
+        },
+        {
+            text: t('.items'), name: 'items', value: true, checked: true
+        },
+        {
+            text: t('.state'), name: 'state', value: true, checked: true
+        },
+        {
+            text: t('.units'), name: 'units', value: true, checked: true
+        },
+        {
+            text: t('.quantity'), name: 'quantity', value: true, checked: true
+        },
+        {
+            text: t('.note'), name: 'note', value: true, checked: false
+        }
+    ]
+) %>

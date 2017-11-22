@@ -1,0 +1,127 @@
+<% content_for :title_line_1 do %>
+    <%= 'PHIẾU CHUYỂN KHO' %>
+<% end %>
+
+<% content_for :title_line_2 do %>
+    Ngày <%= @transfer.received_at.strftime('%d') %>
+    tháng <%= @transfer.received_at.strftime('%m') %>
+    năm <%= @transfer.received_at.strftime('%Y') %>.
+    <div>Số: <%= @transfer.code %></div>
+<% end %>
+
+<% content_for :main_info_col_1 do %>
+  <p>
+    <label>Kho nguồn:</label>
+    <span><strong><%= @transfer.source_warehouse_name %></strong></span>
+  </p>
+  <p>
+    <label>Ghi chú:</label>
+    <span><%= @transfer.note %></span>
+  </p>
+<% end %>
+
+<% content_for :main_info_col_2 do %>
+  <p>
+    <label>Kho đích:</label>
+    <span><strong><%= @transfer.destination_warehouse_name %></strong></span>
+  </p>
+<% end %>
+
+<% content_for :main_info_col_3 do %>
+  <p>
+    <label></label>
+    <span></span>
+  </p>
+  <p>
+    <label></label>
+    <span></span>
+  </p>
+<% end %>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="custom-invoice invoice-content-2 bordered">
+            <div class="row invoice-body">
+                <div class="col-xs-12 table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <% if get_columns(params).include?("ordinal_number") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.ordinal_number') %></th>
+                                <% end %>
+                                <% if get_columns(params).include?("items") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.items') %></th>
+                                <% end %>
+                                <% if get_columns(params).include?("state") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.state') %></th>
+                                <% end %>
+                                <% if get_columns(params).include?("units") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.units') %></th>
+                                <% end %>
+                                <% if get_columns(params).include?("quantity") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.quantity') %></th>
+                                <% end %>
+                                <% if get_columns(params).include?("note") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.note') %></th>
+                                <% end %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @transfer.transfer_details.each_with_index do |transfer_detail,index| %>
+                                <tr>
+                                    <% if get_columns(params).include?("ordinal_number") %>
+                                        <td class="text-center"><%= index+1 %></td>
+                                    <% end %>
+                                    <% if get_columns(params).include?("items") %>
+                                        <td>
+                                            <p><%= transfer_detail.product_name %></p>
+                                        </td>
+                                    <% end %>
+                                    <% if get_columns(params).include?("state") %>
+                                        <td class="text-center"><%= transfer_detail.state_name %></td>
+                                    <% end %>
+                                    <% if get_columns(params).include?("units") %>
+                                        <td class="text-center"><%= transfer_detail.product.unit_name %></td>
+                                    <% end %>
+                                    <% if get_columns(params).include?("quantity") %>
+                                        <td class="text-center sbold"><%= transfer_detail.quantity %></td>
+                                    <% end %>
+                                    <% if get_columns(params).include?("note") %>
+                                        <td class="text-length"></td>
+                                    <% end %>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-footer">
+    <div class="liner">
+        <label>Cộng số lượng chuyển:</label>
+        <span class="text-center"><%= format_number(@transfer.cache_products_count) %></span>
+    </div>
+</div>
+<% content_for :footer do %>
+    <div class="col text-center" style="width: 33%">
+        <p>
+            <strong>Người lập phiếu</strong><br/>
+            <i>(Ký, họ tên)</i>
+        </p>
+        <p class="sign_name"><%= @transfer.creator_name %></p>
+    </div>
+    <div class="col text-center" style="width: 33%">
+        <p>
+            <strong>Người chuyển hàng</strong><br/>
+            <i>(Ký, họ tên)</i>
+        </p>
+    </div>
+    <div class="col text-center" style="width: 33%">
+        <p>
+            <strong>Thủ kho</strong><br/>
+            <i>(Ký, họ tên)</i>
+        </p>
+    </div>
+<% end %>

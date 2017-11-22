@@ -14,11 +14,16 @@ module Erp::StockTransfers
         destination_warehouse.present? ? destination_warehouse.name : ''
       end
 		end
+    
+    # display creator name
+    def creator_name
+      creator.present? ? creator.name : ''
+    end
+    
     has_many :transfer_details, inverse_of: :transfer, dependent: :destroy
     accepts_nested_attributes_for :transfer_details, :reject_if => lambda { |a| a[:product_id].blank? || a[:quantity].blank? || a[:quantity].to_i <= 0 }, :allow_destroy => true
     
     after_save :update_cache_products_count
-    after_save :generate_code
     
     validates :code, uniqueness: true
     validates :received_at, :source_warehouse_id, :destination_warehouse_id, presence: true
@@ -171,9 +176,12 @@ module Erp::StockTransfers
 		end
     
     # Generate code
+    before_validation :generate_code
     def generate_code
 			if !code.present?
-				update_columns(code: 'CK' + received_at.strftime("%Y").last(2) + received_at.strftime("%m") + "-" + id.to_s.rjust(3, '0'))
+				num = Erp::StockTransfers::Transfer.where('received_at >= ? AND received_at <= ?', self.received_at.beginning_of_month, self.received_at.end_of_month).count + 1
+
+				self.code = 'CK' + received_at.strftime("%m") + received_at.strftime("%Y").last(2) + "-" + num.to_s.rjust(3, '0')
 			end
 		end
     

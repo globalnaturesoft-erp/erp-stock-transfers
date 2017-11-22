@@ -2,7 +2,7 @@ module Erp
   module StockTransfers
     module Backend
       class TransfersController < Erp::Backend::BackendController
-        before_action :set_transfer, only: [:show, :edit, :update, :destroy, :transfer_details,
+        before_action :set_transfer, only: [:show_list, :pdf, :show, :edit, :update, :destroy, :transfer_details,
                                             :set_draft, :set_activate, :set_delivery, :set_remove]
         before_action :set_transfers, only: [:set_activate_all, :set_delivery_all, :set_remove_all]
 
@@ -24,6 +24,48 @@ module Erp
 
         # GET /transfers/1
         def show
+          respond_to do |format|
+            format.html
+            format.pdf do
+              render pdf: "show_list",
+                layout: 'erp/backend/pdf'
+            end
+          end
+        end
+        
+        # GET /orders/1
+        def pdf
+          #authorize! :read, @delivery
+
+          respond_to do |format|
+            format.html
+            format.pdf do
+              if @transfer.transfer_details.count < 8
+                render pdf: "#{@transfer.code}",
+                  title: "#{@transfer.code}",
+                  layout: 'erp/backend/pdf',
+                  page_size: 'A5',
+                  orientation: 'Landscape',
+                  margin: {
+                    top: 7,                     # default 10 (mm)
+                    bottom: 7,
+                    left: 7,
+                    right: 7
+                  }
+              else
+                render pdf: "#{@transfer.code}",
+                  title: "#{@transfer.code}",
+                  layout: 'erp/backend/pdf',
+                  page_size: 'A4',
+                  margin: {
+                    top: 7,                     # default 10 (mm)
+                    bottom: 7,
+                    left: 7,
+                    right: 7
+                  }
+              end
+            end
+          end
         end
 
         # GET /transfers/new

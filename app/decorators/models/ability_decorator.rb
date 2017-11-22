@@ -17,8 +17,12 @@ Erp::Ability.class_eval do
       transfer.is_draft? or transfer.is_active? or transfer.is_delivered?
     end
     
-    can :export_file, Erp::StockTransfers::Transfer do |transfer|
+    can :print, Erp::StockTransfers::Transfer do |transfer|
       transfer.is_draft? or transfer.is_active? or transfer.is_delivered?
+    end
+    
+    can :export_file, Erp::StockTransfers::Transfer do |transfer|
+      #return false
     end
   end
 end

@@ -11,6 +11,8 @@ Erp::StockTransfers::Engine.routes.draw do
           put 'set_activate_all'
           put 'set_delivery_all'
           put 'set_remove_all'
+          post 'show_list'
+          get 'pdf'
         end
       end
       resources :transfer_details do

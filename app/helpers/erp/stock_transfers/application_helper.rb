@@ -6,9 +6,13 @@ module Erp
       def stock_transfer_dropdown_actions(transfer)
         actions = []
         actions << {
+          text: '<i class="fa fa-print"></i> '+t('.view_print'),
+          url: erp_stock_transfers.backend_transfer_path(transfer)
+        } if can? :print, transfer
+        actions << {
           text: '<i class="fa fa-edit"></i> '+t('.edit'),
-          href: erp_stock_transfers.edit_backend_transfer_path(transfer)
-        }
+          url: erp_stock_transfers.edit_backend_transfer_path(transfer)
+        } if can? :update, transfer
         actions << {
           text: '<i class="fa fa-check-square-o"></i> '+t('.activate'),
           url: erp_stock_transfers.set_activate_backend_transfers_path(id: transfer),
