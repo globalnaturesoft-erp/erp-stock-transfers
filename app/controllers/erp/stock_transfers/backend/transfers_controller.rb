@@ -32,7 +32,7 @@ module Erp
             end
           end
         end
-        
+
         # GET /orders/1
         def pdf
           #authorize! :read, @delivery
@@ -73,35 +73,130 @@ module Erp
           @transfer = Transfer.new
           @transfer.received_at = Time.current
 
-          if params[:from_warehouse].present?
-            @from_warehouse = params[:from_warehouse].present? ? Erp::Warehouses::Warehouse.find(params[:from_warehouse]) : nil
-            @to_warehouse = params[:to_warehouse].present? ? Erp::Warehouses::Warehouse.find(params[:to_warehouse]) : nil
-            @transfer_quantity = params[:transfer_quantity]
+          if params.to_unsafe_hash[:from_warehouse].present?
+            global_filters = params.to_unsafe_hash
 
-            @condition = params[:condition]
-            @condition_value = params[:condition_value]
+            @from_warehouse = global_filters[:from_warehouse].present? ? Erp::Warehouses::Warehouse.find(global_filters[:from_warehouse]) : nil
+            @to_warehouse = global_filters[:to_warehouse].present? ? Erp::Warehouses::Warehouse.find(global_filters[:to_warehouse]) : nil
+            @state = global_filters[:state].present? ? Erp::Products::State.find(global_filters[:state]) : nil
+            @transfer_quantity = global_filters[:transfer_quantity]
 
-            ids = Erp::Products::Product.pluck(:id).sample(rand(90..250))
-            @products = Erp::Products::Product.where(id: ids).order(:code)
+            @condition = global_filters[:condition]
+            @condition_value = global_filters[:condition_value]
 
+            # get categories
+            category_ids = global_filters[:categories].present? ? global_filters[:categories] : nil
+            @categories = Erp::Products::Category.where(id: category_ids)
+
+            # get diameters
+            diameter_ids = global_filters[:diameters].present? ? global_filters[:diameters] : nil
+            @diameters = Erp::Products::PropertiesValue.where(id: diameter_ids)
+
+            # get diameters
+            letter_ids = global_filters[:letters].present? ? global_filters[:letters] : nil
+            @letters = Erp::Products::PropertiesValue.where(id: letter_ids)
+
+            # get numbers
+            number_ids = global_filters[:numbers].present? ? global_filters[:numbers] : nil
+            @numbers = Erp::Products::PropertiesValue.where(id: number_ids)
+
+            # query
+            @product_query = Erp::Products::Product.joins(:cache_stocks)
+            @product_query = @product_query.where(category_id: category_ids) if category_ids.present?
+            # filter by diameters
+            if diameter_ids.present?
+              if !diameter_ids.kind_of?(Array)
+                @product_query = @product_query.where("erp_products_products.cache_properties LIKE '%[\"#{diameter_ids}\",%'")
+              else
+                diameter_ids = (diameter_ids.reject { |c| c.empty? })
+                if !diameter_ids.empty?
+                  qs = []
+                  diameter_ids.each do |x|
+                    qs << "(erp_products_products.cache_properties LIKE '%[\"#{x}\",%')"
+                  end
+                  @product_query = @product_query.where("(#{qs.join(" OR ")})")
+                end
+              end
+            end
+            # filter by letters
+            if letter_ids.present?
+              if !letter_ids.kind_of?(Array)
+                @product_query = @product_query.where("erp_products_products.cache_properties LIKE '%[\"#{letter_ids}\",%'")
+              else
+                letter_ids = (letter_ids.reject { |c| c.empty? })
+                if !letter_ids.empty?
+                  qs = []
+                  letter_ids.each do |x|
+                    qs << "(erp_products_products.cache_properties LIKE '%[\"#{x}\",%')"
+                  end
+                  @product_query = @product_query.where("(#{qs.join(" OR ")})")
+                end
+              end
+            end
+            # filter by numbers
+            if number_ids.present?
+              if !number_ids.kind_of?(Array)
+                @product_query = @product_query.where("erp_products_products.cache_properties LIKE '%[\"#{number_ids}\",%'")
+              else
+                number_ids = (number_ids.reject { |c| c.empty? })
+                if !number_ids.empty?
+                  qs = []
+                  number_ids.each do |x|
+                    qs << "(erp_products_products.cache_properties LIKE '%[\"#{x}\",%')"
+                  end
+                  @product_query = @product_query.where("(#{qs.join(" OR ")})")
+                end
+              end
+            end
+
+
+            if @to_warehouse.present? and @from_warehouse.present? and @state.present?
+              if @condition == 'to_required'
+                #ids = Erp::Products::Product.pluck(:id).sample(rand(90..250))
+                #@products = Erp::Products::Product.where(id: ids).order(:code)
+                @product_query = @product_query.where(erp_products_cache_stocks: {warehouse_id: @to_warehouse.id, state_id: @state.id})
+                  .where("stock <= ?", @condition_value)
+              elsif @condition == 'from_redundant'
+                @product_query = @product_query.where(erp_products_cache_stocks: {warehouse_id: @from_warehouse.id, state_id: @state.id})
+                  .where("stock > ?", @condition_value)
+              end
+            end
+
+            @products = @product_query.limit(100)
+            logger.info "###################sssss###################"
+            logger.info @products.count
+
+            ##################################################################
             @transfer.source_warehouse_id = @from_warehouse.id
             @transfer.destination_warehouse_id = @to_warehouse.id
 
             @products.each do |product|
               if @condition == 'from_redundant'
-                from = rand(@condition_value.to_i..(@condition_value.to_i+4))
-                to = rand(0..2)
-                transfer = @transfer_quantity
+                from = Erp::Products::CacheStock.where(product_id: product.id)
+                    .where(warehouse_id: @from_warehouse.id)
+                    .where(state_id: @state.id).first.stock
+                to = Erp::Products::CacheStock.where(product_id: product.id)
+                    .where(warehouse_id: @to_warehouse.id)
+                    .where(state_id: @state.id).first.stock
+                transfer = from - @condition_value.to_i
               else
-                to = rand(0..@condition_value.to_i)
-                from = rand(1..6)
+                to = Erp::Products::CacheStock.where(product_id: product.id)
+                    .where(warehouse_id: @to_warehouse.id)
+                    .where(state_id: @state.id).first.stock
+                from = Erp::Products::CacheStock.where(product_id: product.id)
+                    .where(warehouse_id: @from_warehouse.id)
+                    .where(state_id: @state.id).first.stock
                 transfer = from > @transfer_quantity.to_i ? @transfer_quantity.to_i : from
               end
 
-              @transfer.transfer_details.build(
-                quantity: transfer,
-                product_id: product.id
-              )
+              #if transfer > 0
+
+                @transfer.transfer_details.build(
+                  quantity: transfer,
+                  product_id: product.id,
+                  state_id: @state.id
+                )
+              #end
             end
           end
 
@@ -129,7 +224,7 @@ module Erp
                 value: @transfer.id
               }
             else
-              redirect_to erp_stock_transfers.edit_backend_transfer_path(@transfer), notice: t('.success')
+              redirect_to erp_stock_transfers.backend_transfers_path, notice: t('.success')
             end
           else
             if request.xhr?
@@ -151,7 +246,7 @@ module Erp
                 value: @transfer.id
               }
             else
-              redirect_to erp_stock_transfers.edit_backend_transfer_path(@transfer), notice: t('.success')
+              redirect_to erp_stock_transfers.backend_transfers_path, notice: t('.success')
             end
           else
             render :edit
