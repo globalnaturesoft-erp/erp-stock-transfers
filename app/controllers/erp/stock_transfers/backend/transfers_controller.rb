@@ -189,14 +189,14 @@ module Erp
                 transfer = from > @transfer_quantity.to_i ? @transfer_quantity.to_i : from
               end
 
-              #if transfer > 0
+              if transfer > 0
 
                 @transfer.transfer_details.build(
                   quantity: transfer,
                   product_id: product.id,
                   state_id: @state.id
                 )
-              #end
+              end
             end
           end
 

@@ -34,6 +34,15 @@ module Erp::StockTransfers
     STATUS_DELIVERED = 'delivered'
     STATUS_DELETED = 'deleted'
     
+    after_save :update_product_cache_stock
+
+    # update product cache stock
+    def update_product_cache_stock
+			self.transfer_details.each do |td|
+        td.update_product_cache_stock
+      end
+		end
+    
     # Filters
     def self.filter(query, params)
       params = params.to_unsafe_hash

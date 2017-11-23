@@ -5,6 +5,12 @@ module Erp::StockTransfers
     belongs_to :state, class_name: 'Erp::Products::State'
 
     after_save :update_transfer_cache_products_count
+    after_save :update_product_cache_stock
+
+    # update product cache stock
+    def update_product_cache_stock
+			self.product.update_cache_stock if self.product.present?
+		end
 
     def quantity=(number)
       self[:quantity] = number.to_s.gsub(/\,/, '')
