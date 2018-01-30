@@ -162,7 +162,7 @@ module Erp
               end
             end
 
-            @products = @product_query.limit(100)
+            @products = @product_query
             logger.info "###################sssss###################"
             logger.info @products.count
 
