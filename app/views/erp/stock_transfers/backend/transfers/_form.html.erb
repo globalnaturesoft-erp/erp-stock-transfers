@@ -1,3 +1,5 @@
+<%= @transfer.errors %>
+
 <%= form_for([erp_stock_transfers, :backend, transfer], html: {multipart: true}) do |f| %>
     <div class="form-body">
         <div class="row">
@@ -98,7 +100,7 @@
                                     thead: "<th>#{t('.product_code')}</th>
                                             <th>#{t('.product_name')}</th>
                                             <th class='text-right'>#{t('.quantity')}</th>
-                                            
+
                                             <th class='text-right'>#{t('.action')}</th>"
                                 }) %>
 

@@ -13,6 +13,8 @@ Erp::StockTransfers::Engine.routes.draw do
           put 'set_remove_all'
           post 'show_list'
           get 'pdf'
+
+          post 'new_import'
         end
       end
       resources :transfer_details do
