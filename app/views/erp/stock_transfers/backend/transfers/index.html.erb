@@ -7,11 +7,13 @@
 <% end %>
 
 <% content_for :page_toolbar do %>
-    <%= erp_component('button/create', {
-        text: t('.create'),
-        href: erp_stock_transfers.new_backend_transfer_path,
-        class: 'btn-noborder'
-    }) %>
+    <%=
+        erp_component('button/create', {
+            text: t('.create'),
+            href: erp_stock_transfers.new_backend_transfer_path,
+            class: 'btn-noborder'
+        }) if can? :inventory_stock_transfers_transfers_create, nil
+    %>
 <% end %>
 
 <% content_for :global_filter do %>
@@ -52,9 +54,6 @@
 <%= erp_datalist(
     url: erp_stock_transfers.list_backend_transfers_path,
     keywords: [
-        {
-            text: t('.keywords'), name: ''
-        },
         {
             text: t('.transfer_code'), name: 'erp_stock_transfers_transfers.code'
         },

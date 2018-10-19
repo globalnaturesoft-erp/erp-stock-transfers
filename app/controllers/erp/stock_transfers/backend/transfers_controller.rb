@@ -2,16 +2,23 @@ module Erp
   module StockTransfers
     module Backend
       class TransfersController < Erp::Backend::BackendController
-        before_action :set_transfer, only: [:show_list, :pdf, :show, :edit, :update, :destroy, :transfer_details,
+        before_action :set_transfer, only: [:show_list, :pdf, :show, :edit, :update, :transfer_details,
                                             :set_draft, :set_activate, :set_delivery, :set_remove]
         before_action :set_transfers, only: [:set_activate_all, :set_delivery_all, :set_remove_all]
 
         # GET /transfers
         def index
+          if Erp::Core.available?("ortho_k")
+            authorize! :inventory_stock_transfers_transfers_index, nil
+          end
         end
 
         # POST /transfers/list
         def list
+          if Erp::Core.available?("ortho_k")
+            authorize! :inventory_stock_transfers_transfers_index, nil
+          end
+          
           @transfers = Transfer.search(params).paginate(:page => params[:page], :per_page => 10)
 
           render layout: nil
@@ -24,6 +31,8 @@ module Erp
 
         # GET /transfers/1
         def show
+          authorize! :printable, @transfer
+          
           respond_to do |format|
             format.html
             format.pdf do
@@ -35,7 +44,7 @@ module Erp
 
         # GET /orders/1
         def pdf
-          #authorize! :read, @delivery
+          authorize! :printable, @transfer
 
           respond_to do |format|
             format.html
@@ -71,6 +80,9 @@ module Erp
         # GET /transfers/new
         def new
           @transfer = Transfer.new
+          
+          authorize! :creatable, @transfer
+          
           @transfer.received_at = Time.current
 
           # Import details list from stocking stransfering page
@@ -97,6 +109,9 @@ module Erp
         # GET /transfers/new
         def new_import
           @transfer = Transfer.new
+          
+          authorize! :creatable, @transfer
+          
           @transfer.received_at = Time.current
 
           # Import details list from stocking stransfering page
@@ -120,12 +135,15 @@ module Erp
 
         # GET /transfers/1/edit
         def edit
-          authorize! :update, @transfer
+          authorize! :updatable, @transfer
         end
 
         # POST /transfers
         def create
           @transfer = Transfer.new(transfer_params)
+          
+          authorize! :creatable, @transfer
+          
           @transfer.creator = current_user
           @transfer.set_draft
           @transfer.status = Erp::StockTransfers::Transfer::STATUS_DELIVERED
@@ -151,6 +169,8 @@ module Erp
 
         # PATCH/PUT /transfers/1
         def update
+          authorize! :updatable, @transfer
+          
           if @transfer.update(transfer_params)
             @transfer.set_draft
             if request.xhr?
@@ -167,24 +187,10 @@ module Erp
           end
         end
 
-        # DELETE /transfers/1
-        def destroy
-          @transfer.destroy
-
-          respond_to do |format|
-            format.html { redirect_to erp_stock_transfers.backend_transfers_path, notice: t('.success') }
-            format.json {
-              render json: {
-                'message': t('.success'),
-                'type': 'success'
-              }
-            }
-          end
-        end
-
         # Activate /transfers/status?id=1
         def set_activate
-          authorize! :activate, @transfer
+          authorize! :activatable, @transfer
+          
           @transfer.set_activate
 
           respond_to do |format|
@@ -199,7 +205,8 @@ module Erp
 
         # Delivery /transfers/status?id=1
         def set_delivery
-          authorize! :delivery, @transfer
+          authorize! :deliverable, @transfer
+          
           @transfer.set_delivery
 
           respond_to do |format|
@@ -214,7 +221,8 @@ module Erp
 
         # Remove /transfers/status?id=1
         def set_remove
-          authorize! :delete, @transfer
+          authorize! :cancelable, @transfer
+          
           @transfer.set_remove
 
           respond_to do |format|
@@ -229,7 +237,8 @@ module Erp
 
         # ACTIVATE ALL /transfers/status?ids=1,2,3
         def set_activate_all
-          authorize! :activate, @transfer
+          authorize! :activatablexxxxxxxxxxxxxxxx, @transfer
+          
           @transfers.set_activate_all
 
           respond_to do |format|
@@ -244,7 +253,8 @@ module Erp
 
         # DELIVERY ALL /transfers/status?ids=1,2,3
         def set_delivery_all
-          authorize! :delivery, @transfer
+          authorize! :deliverablexxxxxxxxxxxxxxxx, @transfer
+          
           @transfers.set_delivery_all
 
           respond_to do |format|
@@ -259,7 +269,8 @@ module Erp
 
         # REMOVE ALL /transfers/status?ids=1,2,3
         def set_remove_all
-          authorize! :delete, @transfer
+          authorize! :cancelablexxxxxxxxxxxxxxxx, @transfer
+          
           @transfers.set_remove_all
 
           respond_to do |format|
